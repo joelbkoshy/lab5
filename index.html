@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Educational registration form</title>
+    <title>Registration form</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
         integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
@@ -34,9 +34,12 @@
                 <span></span>
                 <input type="text" name="name" placeholder="Phone number" id="Phone" maxlength="10" minlength="10"
                     required>
-                <input type="password" name="name" placeholder="Password" required id="Password">
                 <span></span>
-                <input type="password" name="name" placeholder="Confirm-Password" required id="CPassword">
+                <input type="password" name="name" placeholder="Password" required id="Password" minlength="8">
+                <span style="display: none;"></span>
+                <label style="margin-top: 12px;margin-bottom: 12px;"><input type="checkbox" onchange="myFunction()">Show Password</label>
+
+                <input type="password" name="name" placeholder="Confirm-Password" required id="CPassword" minlength="8">
                 <span></span>
             </div>
             <div class="checkbox">
@@ -48,6 +51,7 @@
         </form>
     </div>
     <script>
+        var temp = 0
         var firstName = document.getElementById('Fname')
         var lastName = document.getElementById('Lname')
         var email = document.getElementById('Email')
@@ -62,15 +66,14 @@
                 firstName.value = firstName.value.slice(0, fnameLen - 1)
             }
             var re1 = /^[A-Z][A-Za-z]{2,}/
-            if(firstName.value.match(re1))
-            {
-                span[0].innerText="Valid"
-                span[0].style.color="lime";
+            if (firstName.value.match(re1)) {
+                span[0].innerText = "Valid"
+                span[0].style.color = "lime";
             }
-            else{
-           span[0].innerText="Invalid";
-           span[0].style.color="red";
-       }
+            else {
+                span[0].innerText = "Invalid";
+                span[0].style.color = "red";
+            }
         }
         lastName.oninput = function () {
             var num = /[0-9]/
@@ -79,20 +82,18 @@
                 lastName.value = lastName.value.slice(0, lnameLen - 1)
             }
             var re1 = /^[A-Z][A-Za-z]{2,}/
-            if(lastName.value.match(re1))
-            {
-                span[1].innerText="Valid"
-                span[1].style.color="lime";
+            if (lastName.value.match(re1)) {
+                span[1].innerText = "Valid"
+                span[1].style.color = "lime";
             }
-            else{
-           span[1].innerText="Invalid";
-           span[].style.color="red";
-       }
+            else {
+                span[1].innerText = "Invalid";
+                span[1].style.color = "red";
+            }
         }
         email.oninput = function () {
             const regex1 = /^([a-z0-9\.-]+)@([a-z0-9]+)\.([a-z]{1,8})university\.([a-z]{1,6})$/;
-            const regex2 = /^([a-z0-9\.-]+)@([a-z0-9]+)\.([a-z]{1,8})(.[a-z]{1,8})$/;
-            if (regex1.test(email.value) || regex2.test(email.value)) {
+            if (regex1.test(email.value)) {
                 span[2].innerText = "Your Email is Valid";
                 span[2].style.color = "lime";
             }
@@ -100,6 +101,86 @@
                 span[2].innerText = "Invalid Email Id";
                 span[2].style.color = "red";
             }
+        }
+        phoneNo.oninput = function () {
+            const numreg = /[0-9]{10}/
+            const numreg1 = /(?!^\d+$)^.+$/g
+            if (phoneNo.value.match(numreg)) {
+                span[3].innerText = "Valid"
+                span[3].style.color = "lime";
+            }
+            else if (phoneNo.value.match(numreg1)) {
+                phoneNoLength = phoneNo.value.length
+                phoneNo.value = phoneNo.value.slice(0, phoneNoLength - 1);
+            }
+            else {
+                span[3].innerText = "Invalid"
+                span[3].style.color = "red";
+            }
+        }
+
+        password.oninput = function () {
+            var start_end = /^[a-z].*[a-z]$/g
+            var lowercase = /[a-z]/g
+            var uppercase = /[A-Z]/g
+            var num = /[0-9]/g
+            var spl = /[!@#$%^&*()~`\_\-\+\={}\[\]|\\;:'",./<>?]/g
+            if (!password.value.match(lowercase)) {
+                span[4].innerText = "Minimum one lowercase character is needed"
+                span[4].style.color = "red"
+                span[4].style.display = "block"
+            }
+            if (!password.value.match(num)) {
+                span[4].innerText = "Add a minimum of 1 numeric character [0-9]"
+                span[4].style.color = "red"
+                span[4].style.display = "block"
+            }
+            if (!password.value.match(uppercase)) {
+                span[4].innerText = "Minimum one uppercase character is needed."
+                span[4].style.color = "red"
+                span[4].style.display = "block"
+            }
+            if (!password.value.match(spl)) {
+                span[4].innerText = "Minimum one special character is needed."
+                span[4].style.color = "red"
+                span[4].style.display = "block"
+            }
+            if (password.value.length < 8) {
+                span[4].innerText = "Minimum 8 characters are needed."
+                span[4].style.display = "block"
+            }
+            if (!password.value.match(start_end)) {
+                span[4].innerText = " The starting and ending character should be a lowercase character."
+                span[4].style.color = "red"
+                span[4].style.display = "block"
+            }
+            if (password.value.match(start_end) && password.value.match(lowercase) && password.value.match(uppercase) && password.value.match(spl) && (password.value.length > 7)) {
+                span[4].innerText = "Valid Password!"
+                span[4].style.color = "lime";
+                span[4].style.display = "block"
+                temp = 1
+            }
+        }
+        cpassword.oninput = function () {
+
+            if (temp != 1) {
+                span[5].innerText = "Password criterias are not satisfied!"
+                span[5].style.color = "red"
+            }
+            if (cpassword.value == password.value && password.value != "") {
+                span[5].innerText = "Password matched!!"
+                span[5].style.color = "lime"
+            }
+           //Show Password
+            function myFunction() {
+                var x = document.getElementById('Password');
+                if (x.type === "password") {
+                    x.type = "text";
+                } else {
+                    x.type = "password";
+                }
+            }
+
         }
     </script>
 </body>
